@@ -3,6 +3,7 @@ from openai import OpenAI
 from rest_framework.decorators import api_view
 from rest_framework.response import Response 
 from django.conf import settings 
+from .models import Conversation
 
 client = OpenAI(api_key = settings.OPENAI_API_KEY)
 
@@ -21,7 +22,27 @@ def ai_response(request):
                 {"role": "user", "content": user_message},     # User's prompt
             ]
         )
-        return Response({"response": response.choices[0].message.content})
+
+        bot_response = response.choices[0].message.content 
+
+        conversation = Conversation.objects.create(
+            user_message=user_message,
+            bot_response=bot_response
+        )
+        conversation.save()
+
+        return Response({"response": bot_response})
 
     except Exception as e:
         return Response({"error": str(e)}, status=500)
+
+
+@api_view(["GET"])
+def conversation_history(request):
+    conversations = Conversation.objects.all().order_by('-timestamp')
+    history = [
+        {"user_message": convo.user_message, 
+         "bot_response": convo.bot_response, "timestamp": convo.timestamp}
+        for convo in conversations
+    ]
+    return Response(history)
