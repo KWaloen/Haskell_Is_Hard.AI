@@ -13,14 +13,22 @@ SYSTEM_PROMPT = "For the duration of this conversation, please you off colour an
 @api_view(["POST"])
 def ai_response(request):
     user_message = request.data.get("user message")
-   
+
+    conversation_history = Conversation.objects.all().order_by('timestamp')
+
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+
+    for convo in conversation_history: 
+        messages.append({"role": "user", "content": convo.user_message})
+        messages.append({"role": "assistant", "content": convo.bot_response})
+
+    #current message
+    messages.append({"role": "user", "content": user_message})
+
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",  
-             messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},  # System prompt defines the behavior
-                {"role": "user", "content": user_message},     # User's prompt
-            ]
+             messages=messages,
         )
 
         bot_response = response.choices[0].message.content 
@@ -37,12 +45,3 @@ def ai_response(request):
         return Response({"error": str(e)}, status=500)
 
 
-@api_view(["GET"])
-def conversation_history(request):
-    conversations = Conversation.objects.all().order_by('-timestamp')
-    history = [
-        {"user_message": convo.user_message, 
-         "bot_response": convo.bot_response, "timestamp": convo.timestamp}
-        for convo in conversations
-    ]
-    return Response(history)
