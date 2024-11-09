@@ -21,7 +21,7 @@ OPENAI_API_KEY = env('OPENAI_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "158.39.74.70", "www.kwal.no"]
 
 # Application definition
 
@@ -123,5 +123,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',  # Your React app running locally
+    'http://localhost:3000',  # The port the frontend is running on
+    'https://www.kwal.no', # The url of the frontend
 ]
