@@ -16,7 +16,7 @@ services:
       - static:/static #this is to make sure /static requests are routed to the shared volumne on host machine where django static files are stored
       - nginx_logs:/var/log/nginx # logs available from where we defined in the nginx Dockerfile
     ports:
-      - "8000:80"
+      - "8000:443"
     depends_on:
       - haskellishardai_backend
     restart: always
