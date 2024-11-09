@@ -14,7 +14,6 @@ SYSTEM_PROMPT = "For the duration of this conversation, please you off colour an
 
 @api_view(["POST"])
 def ai_response(request):
-    print("start")
     user_message = request.data.get("user message")
 
     conversation_history = Conversation.objects.all().order_by('timestamp')
@@ -29,19 +28,13 @@ def ai_response(request):
     messages.append({"role": "user", "content": user_message})
 
     try:
-        print("try")
-        
-        
-        print("response")
         response = client.chat.completions.create(
             model="gpt-4o-mini",  
             messages=messages,
         )
 
-        print("bot response")
         bot_response = response.choices[0].message.content 
 
-        print("create conversation")
         conversation = Conversation.objects.create(
             user_message=user_message,
             bot_response=bot_response

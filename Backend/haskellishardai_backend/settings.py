@@ -21,7 +21,7 @@ OPENAI_API_KEY = env('OPENAI_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "158.39.74.70", "www.kwal.no", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "37.27.195.99", "www.kwal.no", "127.0.0.1"]
 
 # Application definition
 

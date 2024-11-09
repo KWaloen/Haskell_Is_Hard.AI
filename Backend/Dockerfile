@@ -15,14 +15,10 @@ RUN pip install -r requirements.txt
 COPY . /haskellishardai_backend/
 
 # Expose the Gunicorn port
-EXPOSE 8000
-
-# collect all static files to the root directory - mainly for admin panel
-RUN python manage.py collectstatic --no-input
+EXPOSE 9000
 
 # migrate db
 RUN python manage.py migrate
-RUN python manage.py load_llm_data
 
 # Run Gunicorn
 CMD ["gunicorn", "haskellishardai_backend.wsgi:application", "--bind", "0.0.0.0:8000"]
