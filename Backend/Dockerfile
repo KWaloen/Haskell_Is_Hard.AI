@@ -15,7 +15,7 @@ RUN pip install -r requirements.txt
 COPY . /haskellishardai_backend/
 
 # Expose the Gunicorn port
-EXPOSE 9000
+EXPOSE 8000
 
 # migrate db
 RUN python manage.py migrate
